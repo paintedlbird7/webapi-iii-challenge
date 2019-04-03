@@ -23,7 +23,7 @@ server.use(teamNamer);
 
 
 
-server.use('/api/posts', restricted, 
+server.use('/api/posts/', restricted, 
 // only('Frodo'), 
 postsRouter);
 
@@ -71,6 +71,31 @@ function restricted(req, res, next) {
 }
 
 
+
+function only(name) {
+    //returns the middleware
+    return function(req, res, next) {
+      const personName = req.headers.name || ''; // just in case there is no name header provided
+  
+      // This function can use the parameter passed to the wrapper function
+  
+      if (personName.toUpperCase()=== name.toUpperCase()) {
+        next()
+      } else {
+        res.status(401).json({ message: 'You have no access to this resource' })
+      }
+    }
+  }
+  
+  
+  
+  function errorHandler(error, req, res, next) {
+    // here you could inspect the errror and decide how to respond
+  
+    res.status(400).json({ message: 'NO NO NO NO!!!!!!!', error })
+  }
+  
+  
 
 
 module.exports = server;
